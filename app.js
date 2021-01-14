@@ -2,7 +2,7 @@ const list = document.querySelector('.lists');
 const form = document.querySelector('.--form')
 const input = document.querySelector('.input')
 const deleteLink = document.querySelector('.delete');
-let todos = JSON.parse(localStorage.getItem('.lists'))
+const todos = JSON.parse(localStorage.getItem('.tasks'))
 if(todos){
  todos.forEach(todo => addToDo(todo));
 }
@@ -10,7 +10,7 @@ if(todos){
 form.addEventListener('submit', function(e){
 e.preventDefault()
 addToDo()
-updateLS(todos);
+updateLS(todos)
 });
 //add tasks function
    function addToDo(e){
@@ -22,7 +22,7 @@ updateLS(todos);
    li.appendChild(document.createTextNode(input.value));
    list.appendChild(li).appendChild(deleteId);
    input.value = " ";
-   updateLS()
+   li.setAttribute("onclick", "toggleTask(event)");
    
 }
 //remove items function
@@ -36,12 +36,16 @@ function removeItems(e){
 list.addEventListener('click', removeItems);
 
 //to check if a task has been completed
-list.addEventListener('click', function(e){
-    if(e.target.className === 'items'){
+document.querySelectorAll('li').forEach(function(item){item.addEventListener('click', function(e){
         e.target.classList.toggle('completed');
-    }
-    updateLS();
-  });
+        updateLS()
+    })
+});
+
+function toggleTask(e){
+    e.target.classList.toggle('completed');
+    updateLS()
+}
 //local storage
 function updateLS(){
     todosEl = document.querySelectorAll('li');
@@ -54,4 +58,3 @@ function updateLS(){
     })
     localStorage.setItem('tasks', JSON.stringify(todos));
 }
-
